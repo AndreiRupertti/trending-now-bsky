@@ -3,6 +3,7 @@ name: Send Trending Topics message
 on:
   schedule: 
     - cron: '*/15 * * * *'
+  workflow_dispatch:
 
 jobs:
   build:
