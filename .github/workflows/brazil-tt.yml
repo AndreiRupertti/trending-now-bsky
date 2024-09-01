@@ -29,5 +29,8 @@ jobs:
           echo BLUESKY_PASSWORD=${{ secrets.BLUESKY_PASSWORD }} >> .env
           cat .env
 
-      - name: Send post
-        run: npm start
+      - name: Send post Brazil
+        run: npm start brazil
+
+      - name: Send post World
+        run: npm start world

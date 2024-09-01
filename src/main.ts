@@ -4,21 +4,15 @@ import jsdom from 'jsdom';
 const { JSDOM } = jsdom;
 
 dotenv.config();
-
+const args = process.argv.slice(2);
 const SEARCH_URl = 'https://bsky.app/search?q='
 
+const REGION = args[0]
+const NUMBER_OF_TRENDS_TO_SHOW = 10
 // Create a Bluesky Agent 
 const agent = new AtpAgent({
     service: 'https://bsky.social',
 })
-
-function escapeRegExp(str: string) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
-function replaceAll(str: string, find: string, replace: string) {
-    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
-}
 
 const removeWhiteSpace = (str: string) => {
     return str.replace(/\s+/g, ' ');
@@ -27,11 +21,15 @@ const removeWhiteSpace = (str: string) => {
 const mapNewLines = (str: string) => {
     return str.replace(/\n+/g, '.');
 };
-const reTrending = /(?<=\<span id="select_txt_."><a\shref=.*?\>).*?(?=\<\/span\>)/g;
-const reCount = /(?<=\<h2 class="card-title"><a\shref=.*?\>).*?(?=\<\/a\>)/g;
+
+const capitalizeFirstLetter = (str: string)  => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 
 async function main() {
-    const response = await fetch('https://trends50.net/brazil/')
+    const region = REGION === 'world' ? '' : `${REGION}/`
+    const response = await fetch(`https://trends50.net/${region}`)
 
     if (!response.ok) return console.error('Error!')
     const data = await response.text()
@@ -39,7 +37,7 @@ async function main() {
     const dom = new JSDOM(data);
     const elements = [...dom.window.document.querySelectorAll('.list-group-item:not([aria-current=true])')]
 
-    const result = elements.slice(0, 10)
+    const result = elements.slice(0, NUMBER_OF_TRENDS_TO_SHOW)
         .map((el) => { console.log(el.textContent); return el })
         .map((el) => mapNewLines((el.textContent!).trim()))
         .map((v) => v.replace(' tweets', ''))
@@ -48,18 +46,7 @@ async function main() {
     console.log(result)
 
     
-    const message = `📈 - Trending Topics on Twitter:
-
-    ${result[0][0]} -${result[0][1]} (${result[0][2]})
-    ${result[1][0]} -${result[1][1]} (${result[1][2]})
-    ${result[2][0]} -${result[2][1]} (${result[2][2]})
-    ${result[3][0]} -${result[3][1]} (${result[3][2]})
-    ${result[4][0]} -${result[4][1]} (${result[4][2]})
-    ${result[5][0]} -${result[5][1]} (${result[5][2]})
-    ${result[6][0]} -${result[6][1]} (${result[6][2]})
-    ${result[7][0]} -${result[7][1]} (${result[7][2]})
-    ${result[8][0]} -${result[8][1]} (${result[8][2]})
-    ${result[9][0]} -${result[9][1]} (${result[9][2]})
+    const message = `📢📈 | Trending Topics on Twitter (${capitalizeFirstLetter(REGION!)}):\n${result.map(r => `${r[0]} -${r[1]} (${r[2] ? r[2] : 'No public count'})\n`).join('')}
     `
     console.log(message)
     
