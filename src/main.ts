@@ -46,7 +46,7 @@ async function main() {
     console.log(result)
 
     
-    const message = `📢📈 | Trending Topics on Twitter (${capitalizeFirstLetter(REGION!)}):\n${result.map(r => `${r[0]} -${r[1]} (${r[2] ? r[2] : 'N/A'})\n`).join('')}
+    const message = `📢📈 | Trending Topics on Twitter (${capitalizeFirstLetter(REGION!)}):\n\n${result.map(r => `${r[0]} -${r[1]} (${r[2] ? r[2] : 'N/A'})\n`).join('')}
     `
     console.log(message)
     
