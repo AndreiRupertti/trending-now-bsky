@@ -1,0 +1,22 @@
+{
+  "name": "trending-now-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node ./src/main.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@atproto/api": "^0.13.5",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "jsdom": "^25.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7"
+  }
+}
