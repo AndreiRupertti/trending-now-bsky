@@ -1,4 +1,4 @@
-name: Build
+name: Send Trending Topics message
 
 on:
   schedule: 
